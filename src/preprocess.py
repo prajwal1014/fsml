@@ -79,7 +79,7 @@ def preprocess_pipeline(path):
     return train_df, val_df, test_df
 
 
-def save_processed_data(train_df, val_df, test_df, output_dir="data/processed"):
+def save_processed_data(train_df, val_df, test_df, output_dir="C:\\Users\\admin\\Downloads\\fsml_project_verified_src\\fsml_project_08-main\\data\\processed"):
     os.makedirs(output_dir, exist_ok=True)
 
     train_path = os.path.join(output_dir, "train.csv")
@@ -96,7 +96,7 @@ def save_processed_data(train_df, val_df, test_df, output_dir="data/processed"):
 
 
 if __name__ == "__main__":
-    raw_data_path = "data/raw/train_FD001.txt"
+    raw_data_path = "C:\\Users\\admin\\Downloads\\fsml_project_verified_src\\fsml_project_08-main\\data\\raw\\train_FD001.txt"
 
     train_df, val_df, test_df = preprocess_pipeline(raw_data_path)
 
