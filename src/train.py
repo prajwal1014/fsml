@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 from typing import Any
-
+from utils import logger
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
@@ -11,6 +11,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from xgboost import XGBClassifier
 
 CURRENT_DIR = Path(__file__).resolve().parent
 ROOT_DIR = CURRENT_DIR.parent
@@ -23,7 +25,7 @@ from src.features import SklearnFeatureEngineer
 from src.utils import MODELS_DIR, LOGS_DIR, save_json, save_pickle
 
 
-BEST_MODEL_PATH = MODELS_DIR / "best_model.pkl"
+BEST_MODEL_PATH = MODELS_DIR / "model_v1.pkl"
 METRICS_PATH = LOGS_DIR / "model_metrics.json"
 REPORT_PATH = LOGS_DIR / "evaluation_report.txt"
 FEATURE_NOTE_PATH = LOGS_DIR / "feature_engineering_notes.json"
@@ -81,6 +83,18 @@ def build_models(X_train: pd.DataFrame) -> dict[str, Pipeline]:
         "gradient_boosting": Pipeline(common_steps + [
             ("model", GradientBoostingClassifier(random_state=42)),
         ]),
+        "xgboost": Pipeline(common_steps + [
+            ("model", XGBClassifier(
+                n_estimators=250,
+                max_depth=8,
+                learning_rate=0.1,
+                objective="binary:logistic",
+                use_label_encoder=False,
+                eval_metric="logloss",
+                random_state=42,
+                n_jobs=-1,
+            )),
+        ]),
     }
     return models
 
@@ -120,10 +134,13 @@ def train_and_select_best_model() -> tuple[str, Pipeline, dict[str, Any]]:
 
     for name, pipeline in models.items():
         print(f"\nTraining model: {name}")
+        logger.info(f"Training model: {name}")
         pipeline.fit(X_train, y_train)
 
         val_metrics = evaluate_classifier(pipeline, X_val, y_val)
         test_metrics = evaluate_classifier(pipeline, X_test, y_test)
+        logger.info(f"{name} Validation F1: {val_metrics['f1']}")  
+        logger.info(f"{name} Test F1: {test_metrics['f1']}")
 
         all_results[name] = {
             "validation": val_metrics,
@@ -152,6 +169,7 @@ def train_and_select_best_model() -> tuple[str, Pipeline, dict[str, Any]]:
 if __name__ == "__main__":
     best_name, _, results = train_and_select_best_model()
     print(f"\nBest model: {best_name}")
+    logger.info(f"Best model selected: {best_name}")
     print(f"Validation F1: {results[best_name]['validation']['f1']:.4f}")
     print(f"Test F1: {results[best_name]['test']['f1']:.4f}")
     print(f"Saved best model to: {BEST_MODEL_PATH}")

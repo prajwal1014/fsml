@@ -1,13 +1,10 @@
 Model: logistic_regression
---------------------------------------------------------------------------------
-[VALIDATION]
-Accuracy: 0.9451
-Precision: 0.7539
-Recall: 0.9290
-F1-score: 0.8324
-ROC-AUC: 0.9895239798859141
-Confusion Matrix: [[2564, 141], [33, 432]]
-Classification Report:
+--------------------------------------------------
+Validation metrics:
+  Accuracy: 0.9451
+  F1: 0.8324
+  Confusion matrix: [[2564, 141], [33, 432]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.99      0.95      0.97      2705
@@ -18,14 +15,11 @@ Classification Report:
 weighted avg       0.95      0.95      0.95      3170
 
 
-[TEST]
-Accuracy: 0.9447
-Precision: 0.7575
-Recall: 0.9204
-F1-score: 0.8311
-ROC-AUC: 0.9879826673086182
-Confusion Matrix: [[2543, 137], [37, 428]]
-Classification Report:
+Test metrics:
+  Accuracy: 0.9447
+  F1: 0.8311
+  Confusion matrix: [[2543, 137], [37, 428]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.99      0.95      0.97      2680
@@ -36,18 +30,14 @@ Classification Report:
 weighted avg       0.95      0.94      0.95      3145
 
 
-================================================================================
 
 Model: random_forest
---------------------------------------------------------------------------------
-[VALIDATION]
-Accuracy: 0.9606
-Precision: 0.8881
-Recall: 0.8366
-F1-score: 0.8616
-ROC-AUC: 0.9889611034921391
-Confusion Matrix: [[2656, 49], [76, 389]]
-Classification Report:
+--------------------------------------------------
+Validation metrics:
+  Accuracy: 0.9606
+  F1: 0.8616
+  Confusion matrix: [[2656, 49], [76, 389]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.97      0.98      0.98      2705
@@ -58,14 +48,11 @@ Classification Report:
 weighted avg       0.96      0.96      0.96      3170
 
 
-[TEST]
-Accuracy: 0.9545
-Precision: 0.8455
-Recall: 0.8473
-F1-score: 0.8464
-ROC-AUC: 0.9883437650457391
-Confusion Matrix: [[2608, 72], [71, 394]]
-Classification Report:
+Test metrics:
+  Accuracy: 0.9545
+  F1: 0.8464
+  Confusion matrix: [[2608, 72], [71, 394]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.97      0.97      0.97      2680
@@ -76,18 +63,14 @@ Classification Report:
 weighted avg       0.95      0.95      0.95      3145
 
 
-================================================================================
 
 Model: gradient_boosting
---------------------------------------------------------------------------------
-[VALIDATION]
-Accuracy: 0.9574
-Precision: 0.9024
-Recall: 0.7957
-F1-score: 0.8457
-ROC-AUC: 0.9879728897104127
-Confusion Matrix: [[2665, 40], [95, 370]]
-Classification Report:
+--------------------------------------------------
+Validation metrics:
+  Accuracy: 0.9574
+  F1: 0.8457
+  Confusion matrix: [[2665, 40], [95, 370]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.97      0.99      0.98      2705
@@ -98,14 +81,11 @@ Classification Report:
 weighted avg       0.96      0.96      0.96      3170
 
 
-[TEST]
-Accuracy: 0.9539
-Precision: 0.8604
-Recall: 0.8215
-F1-score: 0.8405
-ROC-AUC: 0.9882603113464934
-Confusion Matrix: [[2618, 62], [83, 382]]
-Classification Report:
+Test metrics:
+  Accuracy: 0.9539
+  F1: 0.8405
+  Confusion matrix: [[2618, 62], [83, 382]]
+  Classification report:
               precision    recall  f1-score   support
 
            0       0.97      0.98      0.97      2680
@@ -116,5 +96,4 @@ Classification Report:
 weighted avg       0.95      0.95      0.95      3145
 
 
-================================================================================
 
