@@ -60,8 +60,8 @@ fsml_project/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd fsml_project_verified_src
+   git clone https://github.com/saiakshay2002/fsml_project_08.git
+   cd fsml_project_08
    ```
 
 2. Create a virtual environment:
