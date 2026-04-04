@@ -85,11 +85,11 @@ python train.py
 
 #### run server:
 ```text
-- uvicorn app.app:app --host 127.0.0.1 --port 8000 --reload
+uvicorn app.app:app --host 127.0.0.1 --port 8000 --reload
 ```
 #### test:
 ```text
--http://127.0.0.1:8000/docs (Swagger UI)
+http://127.0.0.1:8000/docs (Swagger UI)
 ```
 ---
 
