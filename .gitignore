@@ -1,24 +1,29 @@
-# Ignore virtual environments
+# Virtual environments
+venv/
 .venv/
 env/
 
-# Ignore Python cache
+# Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Ignore raw datasets
+# Logs
+logs/
+*.log
+
+# Data (optional)
 data/raw/
-*.txt
-
-# Ignore model files
-*.pkl
-
-# Ignore large csvs (except sample)
 *.csv
 !data/sample_processed.csv
 
-.idea/
-test_preprocess.py
+# Model files
+*.pkl
+!models/model_v1.pkl
 
-# Keep dataset link
-!data/dataset_link.txt
+# IDE
+.idea/
+
+# Misc
+test_preprocess.py
