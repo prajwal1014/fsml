@@ -5,7 +5,7 @@ This project implements a machine learning pipeline for predicting equipment fai
 ## Dataset
 
 **NASA CMAPSS FD001 dataset**  
-Link: https://ti.arc.nasa.gov/tech/dash/groups/pcoe/prognostic-data-repository/
+Link: https://www.kaggle.com/datasets/bishals098/nasa-turbofan-engine-degradation-simulation
 
 The dataset contains sensor readings from turbofan engines. Download the FD001 dataset and place it in:
 
