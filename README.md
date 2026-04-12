@@ -198,3 +198,76 @@ Sample  response:
 ## Logging
 
 All operations are logged to `logs/app.log`. Model training and API requests are logged with timestamps.
+
+## Docker Deployment
+
+### Build Docker Image
+
+```bash
+docker build -t ml-model-app .
+
+docker run -p 8000:8000 ml-model-app
+
+```
+---
+
+
+## CI/CD Pipeline (GitHub Actions)
+
+Workflow file:
+
+.github/workflows/main.yml
+
+### Pipeline Steps
+
+On every push to the main branch:
+
+- Install dependencies
+- Run ML pipeline (pipeline/pipeline.py)
+- Download dataset automatically
+- Train model
+- Build Docker image
+
+## End-to-End Pipeline
+
+Run full pipeline:
+
+```bash
+python pipeline/pipeline.py
+```
+
+
+---
+
+## 📦 Model Versioning
+
+```markdown
+## Model Versioning
+
+Model is saved as:
+
+models/model_v1.pkl
+```
+
+## Logging
+
+Logs are stored in:
+
+logs/app.log
+
+### Includes
+
+- Pipeline execution logs
+- Training logs
+- API request logs
+
+## Project Highlights
+
+- End-to-end ML pipeline
+- FastAPI deployment
+- Docker containerization
+- CI/CD using GitHub Actions
+- Dynamic dataset download
+- Model versioning
+- Logging system
+- Error logs
