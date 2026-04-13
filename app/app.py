@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI
 from app.schema import PredictionInput
 from src.predict import InferencePipeline
@@ -22,7 +21,18 @@ def predict(data: PredictionInput):
 
         logger.info(f"Received input: {input_data}")
 
-        result = pipeline.predict(input_data)
+        #classification
+        cls_result = pipeline.predict(input_data)
+
+        #RUL prediction
+        rul_result = pipeline.predict_rul(input_data)
+
+        #merge outputs
+        result = {
+            **cls_result,
+            "predicted_rul": rul_result["predicted_rul"],
+            "rul_based_prediction": rul_result["failure_prediction"]
+        }
 
         logger.info(f"Prediction result: {result}")
 

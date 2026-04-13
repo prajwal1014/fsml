@@ -10,20 +10,25 @@ __pycache__/
 *.pyd
 
 # Logs
-logs/
-*.log
+logs/*
+!logs/threshold.json
+!logs/model_metrics.json
+!logs/evaluation_report.txt
 
-# Data (optional)
+# Data
 data/raw/
 *.csv
-!data/sample_processed.csv
+!data/processed/*.csv
 
 # Model files
 *.pkl
 !models/model_v1.pkl
+!models/rul_model.pkl
 
 # IDE
 .idea/
 
 # Misc
 test_preprocess.py
+
+test_repo/

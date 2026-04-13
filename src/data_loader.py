@@ -40,6 +40,16 @@ def split_features_target(df: pd.DataFrame, target_col: str = "label"):
     if target_col not in df.columns:
         raise ValueError(f"Target column '{target_col}' not found.")
 
-    X = df.drop(columns=[target_col]).copy()
+    #FIX: remove BOTH label and RUL to avoid leakage
+    X = df.drop(columns=[target_col, "RUL"], errors="ignore").copy()
     y = df[target_col].copy()
+    return X, y
+
+
+def split_features_target_regression(df):
+    if "RUL" not in df.columns:
+        raise ValueError("Target column 'RUL' not found.")
+
+    X = df.drop(columns=["RUL", "label"], errors="ignore").copy()
+    y = df["RUL"].copy()
     return X, y

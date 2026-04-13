@@ -31,6 +31,10 @@ def add_rul_and_label(df, threshold=30):
     df = df.merge(max_cycle, on='engine_id')
 
     df['RUL'] = df['max_cycle'] - df['cycle']
+
+    #NEW: cap RUL (stabilizes regression)
+    df['RUL'] = df['RUL'].clip(upper=125)
+
     df['label'] = (df['RUL'] <= threshold).astype(int)
 
     return df
@@ -67,7 +71,7 @@ def get_useful_columns(train_df):
 
 def clean_dataset(df, useful_cols):
     df = df[useful_cols].copy()
-    df = df.drop(columns=['engine_id', 'cycle', 'max_cycle', 'RUL'], errors='ignore')
+    df = df.drop(columns=['engine_id', 'cycle', 'max_cycle'], errors='ignore')
     df = df.loc[:, ~df.columns.duplicated()]
     return df
 
@@ -98,6 +102,37 @@ def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
 def preprocess_pipeline(path):
     df = load_data(path)
     df = add_rul_and_label(df)
+
+    #NEW: temporal + rolling features
+    df = df.sort_values(['engine_id', 'cycle'])
+
+    key_sensors = ['sensor_1', 'sensor_5', 'sensor_10']
+
+    for sensor in key_sensors:
+        # lag
+        df[f'{sensor}_lag1'] = df.groupby('engine_id')[sensor].shift(1)
+
+        # delta
+        df[f'{sensor}_delta'] = df[sensor] - df[f'{sensor}_lag1']
+
+        # rolling mean
+        df[f'{sensor}_rolling_mean_5'] = (
+            df.groupby('engine_id')[sensor]
+            .rolling(window=5)
+            .mean()
+            .reset_index(level=0, drop=True)
+        )
+
+        # rolling std
+        df[f'{sensor}_rolling_std_5'] = (
+            df.groupby('engine_id')[sensor]
+            .rolling(window=5)
+            .std()
+            .reset_index(level=0, drop=True)
+        )
+
+    # fill NaNs from lag/rolling
+    df = df.fillna(0)
 
     train_df, val_df, test_df = split_by_engine(df)
 
