@@ -16,44 +16,53 @@ data/raw/train_FD001.txt
 ## Project Structure
 
 ```
-fsml_project/
-│── app/
-│   ├── app.py              # FastAPI application
-│   └── schema.py           # Pydantic models for API
+fsml_project_08/
+│
+├── .github/
+│   └── workflows/                 # CI/CD pipeline (GitHub Actions)
+│
+├── app/
+│   ├── app.py                    # FastAPI application (API endpoints)
+│   └── schema.py                 # Input validation (Pydantic models)
 │
 ├── data/
 │   ├── raw/
-│   │   └── train_FD001.txt # Raw dataset
+│   │   └── train_FD001.txt       # Raw NASA CMAPSS dataset
+│   │
 │   └── processed/
-│       ├── train.csv       # Processed training data
-│       ├── val.csv         # Processed validation data
-│       └── test.csv        # Processed test data
+│       ├── train.csv             # Processed training data
+│       ├── val.csv               # Validation data
+│       └── test.csv              # Test data
 │
 ├── logs/
-│   ├── app.log             # Application logs
-│   ├── evaluation_report.txt # Model evaluation results
-│   ├── feature_engineering_notes.json # Feature documentation
-│   └── model_metrics.json  # Detailed metrics
+│   ├── app.log                   # Application logs
+│   ├── evaluation_report.txt     # Model performance summary
+│   ├── feature_engineering_notes.json  # Feature explanations
+│   ├── model_metrics.json        # Detailed metrics
+│   └── threshold.json            # Saved optimal threshold
 │
 ├── models/
-│   └── model_v1.pkl        # Trained model
+│   ├── model_v1.pkl              # Classification model (failure prediction)
+│   └── rul_model.pkl             # Regression model (RUL prediction)
 │
 ├── pipeline/
-│   └── pipeline.py         # End-to-end pipeline
+│   └── pipeline.py               # End-to-end pipeline (run everything)
 │
 ├── src/
-│   ├── data_loader.py      # Data loading utilities
-│   ├── preprocess.py       # Data preprocessing
-│   ├── features.py         # Feature engineering
-│   ├── train.py            # Model training
-│   ├── evaluate.py         # Model evaluation
-│   ├── predict.py          # Inference pipeline
-│   └── utils.py            # Utility functions
+│   ├── data_loader.py            # Data loading utilities
+│   ├── preprocess.py             # Data preprocessing + feature engineering
+│   ├── features.py               # Feature engineering logic
+│   ├── train.py                  # Model training + selection + threshold tuning
+│   ├── evaluate.py               # Model evaluation
+│   ├── predict.py                # Inference logic
+│   └── utils.py                  # Utility functions
 │
-├── config.yaml             # Configuration (currently empty)
-├── Dockerfile              # Docker configuration (currently empty)
-├── requirements.txt        # Python dependencies
-└── README.md
+├── .dockerignore                 # Ignore files for Docker
+├── .gitignore                    # Ignore files for Git
+├── Dockerfile                    # Container setup
+├── requirements.txt             # Python dependencies
+└── README.md                     # Project documentation
+
 ```
 
 ## Installation
@@ -114,7 +123,7 @@ This will:
 Train multiple models and select the best one:
 
 ```bash
-python src/train.py
+python -m src.train
 ```
 
 This will:
@@ -158,31 +167,43 @@ uvicorn app.app:app --host 127.0.0.1 --port 8000 --reload
 ```bash
 curl -X POST "http://127.0.0.1:8000/docs" \
      -H "Content-Type: application/json" \
-     -d '{
-       "sensor_2": 642.0,
-       "sensor_3": 1589.0,
-       "sensor_4": 1400.0,
-       "sensor_7": 554.0,
-       "sensor_8": 2388.0,
-       "sensor_9": 9056.0,
-       "sensor_11": 47.0,
-       "sensor_12": 521.0,
-       "sensor_13": 2388.0,
-       "sensor_14": 8138.0,
-       "sensor_15": 8.0,
-       "sensor_17": 392.0,
-       "sensor_20": 39.0,
-       "sensor_21": 23.0
-     }'
+     -d '{ "op_setting_1": 0.003,
+  "op_setting_2": 0.0,
+  "op_setting_3": 100.0,
+
+  "sensor_1": 520.5,
+  "sensor_2": 645.0,
+  "sensor_3": 1605.0,
+  "sensor_4": 1425.0,
+  "sensor_5": 15.2,
+  "sensor_6": 22.0,
+  "sensor_7": 560.0,
+  "sensor_8": 2395.0,
+  "sensor_9": 9100.0,
+  "sensor_10": 1.5,
+  "sensor_11": 55.0,
+  "sensor_12": 500.0,
+  "sensor_13": 2395.0,
+  "sensor_14": 8200.0,
+  "sensor_15": 9.2,
+  "sensor_16": 0.04,
+  "sensor_17": 400.0,
+  "sensor_18": 2395.0,
+  "sensor_19": 100.0,
+  "sensor_20": 42.0,
+  "sensor_21": 22.0
+}'
 ```
 
 Sample  response:
 ```json
 {
-  "prediction": 0,
-  "prediction_label": "healthy",
-  "failure_probability": 0.1234,
-  "confidence": "low"
+  "prediction": 1,
+  "prediction_label": "near_failure",
+  "failure_probability": 0.7889,
+  "confidence": "high",
+  "predicted_rul": 11.72,
+  "rul_based_prediction": "near_failure"
 }
 ```
 ## Requirements
